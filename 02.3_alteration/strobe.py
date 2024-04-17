@@ -12,9 +12,9 @@ def loop():
     while True:
         if strobing == True:
             LED.on()
-            time.sleep(0.5)
+            time.sleep(0.2)
             LED.off()
-            time.sleep(0.5)
+            time.sleep(0.2)
             print('Strobing LED')
             
 def changeLedState():
