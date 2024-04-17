@@ -13,13 +13,13 @@ def setup():
 def loop():
     while True:
         for pin in ledPins:     # make led(on) move from left to right
-            GPIO.output(pin, GPIO.LOW)  
+            GPIO.output(pin, GPIO.HIGH)  
             time.sleep(0.1)
-            GPIO.output(pin, GPIO.HIGH)
+            GPIO.output(pin, GPIO.LOW)
         for pin in ledPins[::-1]:       # make led(on) move from right to left
-            GPIO.output(pin, GPIO.LOW)  
+            GPIO.output(pin, GPIO.HIGH)  
             time.sleep(0.1)
-            GPIO.output(pin, GPIO.HIGH)
+            GPIO.output(pin, GPIO.LOW)
 
 def destroy():
     GPIO.cleanup()                     # Release all GPIO
