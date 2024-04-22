@@ -19,6 +19,7 @@ def destroy():
     LED.close()
     BUTTON.close()
 
+
 if __name__ == "__main__":     # Program entrance
     print ("Program is starting...")
     try:
