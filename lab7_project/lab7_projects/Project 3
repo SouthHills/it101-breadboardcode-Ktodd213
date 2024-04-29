@@ -1,0 +1,53 @@
+from gpiozero import RGBLED, Button
+import time
+import random
+from signal import pause
+
+LED = RGBLED(red=17, green=18, blue=27, active_high=True)
+button = Button(23)
+Colors = [(1,0,0), (0,1,0), (0,0,1)] 
+Color_is_green = False
+
+def set_color(r, g, b):
+    LED.color = (1 - r, 1 - g, 1 - b)
+
+def color_cycle():
+    global Color_is_green
+    while Color_is_green == False:
+        color = random.choice(Colors)
+        set_color(color[0],color[1],color[2])
+        time.sleep(0.5)
+        if color == Colors[1]:
+            Color_is_green = True
+        
+def Stop_color_cycle():
+    global Color_is_green
+    print("button pressed")
+    
+    if Color_is_green == True:
+        for x in range(0,5):
+            set_color(0,1,0)
+            time.sleep(0.5)
+            set_color(0,0,0)
+            time.sleep(0.3)
+    else:
+        Color_is_green = True
+        for i in range(0,5):
+            set_color(1,0,0)
+            time.sleep(0.5)
+            set_color(0,0,0)
+            time.sleep(0.3)
+
+
+def destroy():
+    LED.close()
+    button.close()
+        
+if __name__ == "__main__":
+    print("Game has started")
+    try:
+        button.when_pressed = Stop_color_cycle
+        color_cycle()
+        pause()
+    except KeyboardInterrupt():
+        destroy()

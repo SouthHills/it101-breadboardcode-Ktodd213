@@ -1,0 +1,34 @@
+from gpiozero import RGBLED
+import time
+
+
+# active_high must be true because it is a common anode RGBLed
+LED = RGBLED(red=17, green=18, blue=27, active_high=True)
+
+def set_color(r, g, y):
+    """ Invert the colors due to using a common anode """
+    LED.color = (1 - r, 1 - g, 1 - y)
+
+def traffic_light():
+    while True:
+        set_color(1, 0, 0)
+        print("red light")
+        time.sleep(5)
+        set_color(1, 1, 0)
+        print("yellow light")
+        time.sleep(2)
+        set_color(0, 1, 0)
+        print("All Green")
+        time.sleep(7)
+
+        
+def destroy():
+    LED.close()
+    
+if __name__ == '__main__':     # Program entrance
+    print ('Program is starting ... ')
+    try:
+        traffic_light()
+    except KeyboardInterrupt:
+        destroy()
+
