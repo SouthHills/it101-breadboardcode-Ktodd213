@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import time
 
+
 # The next two lines are required to be able to properly import ADCDevice
 HERE = Path(__file__).parent.parent
 sys.path.append(str(HERE / 'Common'))
@@ -29,7 +30,7 @@ def setup():
         
 def loop():
     while True:
-        value = ADC.analogRead(0)    # read the ADC value of channel 0
+        value = ADC.analogRead(1)    # read the ADC value of channel 0
         voltage = value / 255.0 * 3.3  # calculate the voltage value
         print(f'ADC Value: {value} \tVoltage: {voltage:.2f}')
         time.sleep(0.1)
