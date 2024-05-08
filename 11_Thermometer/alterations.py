@@ -1,8 +1,8 @@
-# Description : DIY Thermometer
 from pathlib import Path
 import sys
 import time
 import math
+from gpiozero import LEDBarGraph
 
 HERE = Path(__file__).parent.parent
 sys.path.append(str(HERE / 'Common'))
@@ -10,6 +10,8 @@ from ADCDevice import *
 
 USING_GRAVITECH_ADC = False # Only modify this if you are using a Gravitech ADC
 
+LED_PINS : list[int] = [18, 23, 24, 25, 12, 16, 20, 21, 26, 19] #change numbers
+LEDS = LEDBarGraph(*LED_PINS, active_high=False)
 ADC = ADCDevice() # Define an ADCDevice class object
 
 def setup():
@@ -26,7 +28,11 @@ def setup():
             "Program Exit. \n")
         exit(-1)
         
+
 def loop():
+    global ADC, LEDS
+    possible_values = (10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
+    length_of_pv = len(possible_values)
     while True:
         value = ADC.analogRead(0)        # read ADC value A0 pin
         voltage = value / 255.0 * 3.3        # calculate voltage
@@ -36,9 +42,25 @@ def loop():
         tempF = tempC * 1.8 + 32
         print (f'ADC Value: {value} \tVoltage: {voltage:.2f} \tTemperature(C): {tempC:.2f} \tTemperature(F): {tempF:.2f}')
         time.sleep(0.01)
+        
+        for i in range(length_of_pv):
+            if tempF <  possible_values[i]:
+                LEDS[i].off()
 
+        for i in range(length_of_pv):
+            if tempF >= possible_values[i]:
+                LEDS[i].on()
+      
+        voltage = value / 255.0 * 3.3
+        print (f'ADC Value: {value} \tVoltage: {voltage:.2f} ')
+        time.sleep(0.01)
+        
 def destroy():
+    global LEDS
     ADC.close()
+    for led in LEDS:
+        led.off()
+
     
 if __name__ == '__main__':  # Program entrance
     print ('Program is starting... ')
@@ -47,6 +69,3 @@ if __name__ == '__main__':  # Program entrance
         loop()
     except KeyboardInterrupt: # Press ctrl-c to end the program.
         destroy()
-        
-        
-        
